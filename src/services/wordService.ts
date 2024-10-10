@@ -16,6 +16,20 @@ export const getRandomWord = (): string => {
 export const setWordData = (word: string) => {
   letters = alphabeth;
 
+  const accentMap:{[index: string] : string} = {
+    'Á': 'A',
+    'É': 'E',
+    'Í': 'I',
+    'Ó': 'O',
+    'Ú': 'U'
+  };
+  const tildeRegex: RegExp = /[ÁÉÍÓÚ]/;
+
+  //REPLACE THE LETTERS WITH SYMBOLS
+  if (tildeRegex.test(word)) {
+    word = word.replace(/[ÁÉÍÓÚ]/g, (matched) => accentMap[matched]);
+  }
+
   wordObj = {};
   const splitWord = [...word];
   let i = -1;
