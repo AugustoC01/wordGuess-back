@@ -1,6 +1,6 @@
-import { Request, Response} from "express";
+import { NextFunction, Request, Response} from "express";
 
-export function globalErrorHandler(err: any, _: Request, res: Response) {
+export function globalErrorHandler(err: any, _req: Request, res: Response, _next: NextFunction) {
   switch(err) {
     case err.message === "BadRequest":
       return res.status(400).json({message: "Missing required word!"});
