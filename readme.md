@@ -141,7 +141,8 @@ npm run dev
 ### Ejecutar en producción
 
 ```bash
-npm run start
+npm run tsc
+npm start
 ```
 
 ### Ejecutar los tests
