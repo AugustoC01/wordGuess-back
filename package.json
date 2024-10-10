@@ -2,10 +2,10 @@
   "name": "wordGuess",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "server.js",
   "scripts": {
     "dev": "ts-node-dev src/server.ts",
-    "start": "node build/src/server.ts",
+    "start": "node build/src/server.js",
     "test": "jest",
     "tsc": "tsc"
   },
