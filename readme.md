@@ -18,7 +18,7 @@
 
 ---
 
-Esta API es el backend de una aplicación para el juego de adivinar la palabra. Permite generar una palabra aleatoria de una lista y validar las palabras que los usuarios ingresen para adivinarlas.
+Backend del juego adivinar la palabra. Permite generar una palabra aleatoria de una lista y validar las palabras que los usuarios ingresen en cada intento.
 
 ### Palabras almacenadas
 
