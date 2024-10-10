@@ -1,0 +1,46 @@
+{
+  "info": {
+    "_postman_id": "1d70cd49-307d-4314-9caa-d16475c07457",
+    "name": "Word_guess",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get word",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/word",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080"
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Send value",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"value\": \"\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/word",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080"
+        }
+      },
+      "response": []
+    }
+  ]
+}
