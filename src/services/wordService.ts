@@ -1,4 +1,5 @@
 import wordsList from "../Mocks/words.json";
+import normalizedWordsList from "../Mocks/normalizedWords.json";
 import alphabeth from "../Mocks/alphabet.json";
 import { LetterPositions, AlphabetObject } from "../types";
 
@@ -60,7 +61,7 @@ export const getLetterPositions = (value: string): LetterPositions => {
 };
 
 export const wordExists = (value: string): void => {
-  const exists = wordsList.includes(value);
+  const exists = normalizedWordsList.includes(value);
   if (!exists) throw Error("word");
 };
 
