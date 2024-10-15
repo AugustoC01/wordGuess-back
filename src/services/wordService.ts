@@ -1,12 +1,11 @@
 import wordsList from "../Mocks/words.json";
 import normalizedWordsList from "../Mocks/normalizedWords.json";
-import alphabeth from "../Mocks/alphabet.json";
 import { LetterPositions, AlphabetObject } from "../types";
 
 let wordObj: LetterPositions;
-let letters: AlphabetObject;
 let wordLetters: string[];
 
+//THIS FUNCTION GETS A RANDOM WORD FROM THE WORDS LIST
 export const getRandomWord = (): string => {
   let i = Math.trunc(Math.random() * wordsList.length);
   const word = wordsList[i];
@@ -14,9 +13,8 @@ export const getRandomWord = (): string => {
   return word;
 };
 
+//THIS FUNCTION CREATES OBJECTS TO COMPARE WITH THE USER INPUT
 export const setWordData = (word: string) => {
-  letters = alphabeth;
-
   const accentMap:{[index: string] : string} = {
     'Á': 'A',
     'É': 'E',
@@ -31,40 +29,28 @@ export const setWordData = (word: string) => {
     word = word.replace(/[ÁÉÍÓÚ]/g, (matched) => accentMap[matched]);
   }
 
-  wordObj = {};
-  const splitWord = [...word];
-  let i = -1;
-  splitWord.forEach((letter) => {
-    i++;
-    if (!Object.keys(wordObj).includes(letter)) {
-      wordObj[letter] = [i];
-    } else {
-      wordObj[letter].push(i);
-    }
-  });
+  wordObj = getLetterPositions(word);
   wordLetters = Object.keys(wordObj);
 };
 
+//THIS FUNCTION CREATES THE OBJECTS TO COMPARE THE WORDS
 export const getLetterPositions = (value: string): LetterPositions => {
   const splitValue = [...value];
-  let valueObj: LetterPositions = {};
-  let i = -1;
-  splitValue.forEach((letter) => {
-    i++;
-    if (!Object.keys(valueObj).includes(letter)) {
-      valueObj[letter] = [i];
-    } else {
-      valueObj[letter].push(i);
-    }
-  });
+  const valueObj = splitValue.reduce((acc, letter, i) => {
+    acc[letter] = acc[letter] || [];
+    acc[letter].push(i);
+    return acc;
+  }, {} as LetterPositions);
   return valueObj;
 };
 
+//THIS FUNCTION CHECKS IF THE USER INPUT VALUE EXISTS IN THE WORDS LIST
 export const wordExists = (value: string): void => {
   const exists = normalizedWordsList.includes(value);
   if (!exists) throw Error("word");
 };
 
+//THIS FUNCTION HANDLES THE ERROR VALUES(-2 CASE WORD DONT EXIST)
 export const setErrorResult = (errorName: string, value: string): number[] => {
   let errorCode: number = 0;
   switch (errorName) {
@@ -79,15 +65,12 @@ export const setErrorResult = (errorName: string, value: string): number[] => {
   return result;
 };
 
-const setLetterValue = (x: string) => {
-  const i = letters.findIndex((obj) => x == obj.letter);
-  letters[i].status = -1;
-};
-
-export const compareWords = (value: string): number[] => {
+//THIS FUNCTION COMPARES THE WORD TO GUESS VS THE USER INPUT
+export const compareWords = (value: string, disabledLetters: AlphabetObject): {result: number[], disabledLetters: AlphabetObject} => {
   const valueObj = getLetterPositions(value);
   const valueLetters = Object.keys(valueObj);
   const valuePositions = Object.values(valueObj);
+  const newdisabledLetters = {...disabledLetters};
 
   const result = new Array(value.length).fill(-1);
   for (let i = 0; i < valueLetters.length; i++) {
@@ -114,21 +97,21 @@ export const compareWords = (value: string): number[] => {
         }
       });
     } else {
-      setLetterValue(letter);
+      newdisabledLetters[letter] = -1;
     }
   }
-  return result;
+  return {result, disabledLetters: newdisabledLetters};
 };
 
+//THIS FUNCTION RECEIVES THE USER INPUT AND HANLDES THE RESPONSE
 export const getResult = (
-  value: string
-): { result: number[]; letters: AlphabetObject } => {
+  value: string, disabledLetters: AlphabetObject
+): { result: number[], disabledLetters: AlphabetObject } => {
   try {
     wordExists(value);
-    const result = compareWords(value);
-    return { result, letters };
+    return compareWords(value, disabledLetters);
   } catch (e: any) {
     const result = setErrorResult(e.message, value);
-    return { result, letters };
+    return { result, disabledLetters };
   }
 };
