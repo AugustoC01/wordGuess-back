@@ -1,7 +1,7 @@
 import { createClient } from "redis";
 import { dbConfig } from "../config";
 
-const redis = createClient(dbConfig);
+export const redis = createClient(dbConfig);
 
 export const dbConnect = async () => {
   redis.on("error", (err) => {
