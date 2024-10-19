@@ -1,4 +1,4 @@
-import { redis } from "./database";
+import { redis } from "../Database/database";
 
 export const setGameData = async (gameId:string, gameData:any) => {
   try {
