@@ -66,11 +66,11 @@ export const setErrorResult = (errorName: string, value: string): number[] => {
 };
 
 //THIS FUNCTION COMPARES THE WORD TO GUESS VS THE USER INPUT
-export const compareWords = (value: string, disabledLetters: AlphabetObject): {result: number[], disabledLetters: AlphabetObject} => {
+export const compareWords = (value: string): {result: number[], disabledLetters: AlphabetObject} => {
   const valueObj = getLetterPositions(value);
   const valueLetters = Object.keys(valueObj);
   const valuePositions = Object.values(valueObj);
-  const newdisabledLetters = {...disabledLetters};
+  const disabledLetters: AlphabetObject = {}
 
   const result = new Array(value.length).fill(-1);
   for (let i = 0; i < valueLetters.length; i++) {
@@ -97,21 +97,19 @@ export const compareWords = (value: string, disabledLetters: AlphabetObject): {r
         }
       });
     } else {
-      newdisabledLetters[letter] = -1;
+      disabledLetters[letter] = -1;
     }
   }
-  return {result, disabledLetters: newdisabledLetters};
+  return {result, disabledLetters};
 };
 
 //THIS FUNCTION RECEIVES THE USER INPUT AND HANLDES THE RESPONSE
-export const getResult = (
-  value: string, disabledLetters: AlphabetObject
-): { result: number[], disabledLetters: AlphabetObject } => {
+export const getResult = (value: string): { result: number[], disabledLetters: AlphabetObject } => {
   try {
     wordExists(value);
-    return compareWords(value, disabledLetters);
+    return compareWords(value);
   } catch (e: any) {
     const result = setErrorResult(e.message, value);
-    return { result, disabledLetters };
+    return { result, disabledLetters: {} };
   }
 };
