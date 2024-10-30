@@ -38,7 +38,8 @@ Parametro opcional, si el juego ya fue iniciado puede enviarse el Id que guardab
 
 ```json
 {
-  "gameId": "up3jv"
+  "gameId": "zg3kq",
+  "wordToGuess": "PERRO"
 }
 ```
 
@@ -62,7 +63,7 @@ Recibe un objeto JSON con la palabra ingresada por el usuario y el Id asociado a
 ```json
 {
   "gameId": "up3jv",
-  "value": "TRAPO"
+  "value": "PODER"
 }
 ```
 
@@ -83,8 +84,7 @@ Recibe un objeto JSON con la palabra ingresada por el usuario y el Id asociado a
   {
     "result": [1, 0, -1, 0, 0],
     "letters": [
-      { "letter": "P", "status": -1 },
-      { "letter": "O", "status": -1 },
+      { "letter": "D", "status": -1 },
       ...
     ]
   }

@@ -4,16 +4,16 @@ import * as wordService from "./wordService";
 import { AlphabetObject } from "../types";
 
 //THIS FN GETS THE WORD TO GUESS, SAVES THE DATA TO THE DB AND RETURNS A GAMEID
-export const newGame = async (gameId?:string): Promise<string | void> => {
+export const newGame = async (gameId?:string): Promise<{ gameId: string; wordToGuess: string; } | void> => {
   try {
     if (!gameId) {
       gameId = getRandomId();
     }
     const wordToGuess = wordService.getRandomWord();
-    console.log('wordToGuess :', wordToGuess);
+    // console.log('wordToGuess :', wordToGuess);
     const gameData = wordService.setWordData(wordToGuess);
     await setGameData(gameId, gameData);
-    return gameId;
+    return {gameId, wordToGuess};
   } catch (error) {
     console.log('Error: ', error);
   }
