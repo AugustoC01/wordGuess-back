@@ -30,32 +30,39 @@ Las palabras válidas están almacenadas en el archivo `words.json`, ubicado en 
 
 ### 1. GET `/api/wordGame`
 
-Este endpoint devuelve una palabra aleatoria de la lista almacenada en `words.json`.
+Este endpoint obtiene una palabra aleatoria de la lista almacenada en `words.json` la almacena en redis y devuelve el Id asociado a esa partida.
 
 #### **Parámetros**
 
-No recibe parámetros.
-
-#### **Respuesta**
-
-- **200 OK**: Devuelve una palabra aleatoria.
-  ```json
-  {
-    "word": "perro"
-  }
-  ```
-
-### 2. POST `/api/word`
-
-Este endpoint permite enviar una palabra para comparar con la palabra generada y adivinarla.
-
-#### **Parámetros**
-
-Recibe un objeto JSON con la palabra ingresada por el usuario:
+Parametro opcional, si el juego ya fue iniciado puede enviarse el Id que guardaba la partida, en caso de un juego nuevo se genera un Id nuevo.
 
 ```json
 {
-  "value": "poder"
+  "gameId": "up3jv"
+}
+```
+
+#### **Respuesta**
+
+- **200 OK**: Genera una palabra, la almacena en redis y devuelve el Id asociado.
+  ```json
+  {
+    "gameId": "up3jv"
+  }
+  ```
+
+### 2. POST `/api/wordGame`
+
+Este endpoint permite enviar una palabra, junto con su Id asociado a redis, para compararla con la palabra generada.
+
+#### **Parámetros**
+
+Recibe un objeto JSON con la palabra ingresada por el usuario y el Id asociado a esa palabra en redis:
+
+```json
+{
+  "gameId": "up3jv",
+  "value": "TRAPO"
 }
 ```
 
@@ -70,18 +77,14 @@ Recibe un objeto JSON con la palabra ingresada por el usuario:
     - `0` significa que la letra está en la palabra pero en otra posición.
     - `-1` significa que la letra no está en la palabra.
     - `-2` si la palabra no existe en la lista.
-  - **letters**: Un array con todas las letras del alfabeto y su estado (`1` por defecto, `-1` si la letra fue usada en una palabra y esta no pertenece a la palabra generada).
+  - **letters**: Un array con las letras de la palabra enviada por el usuario que no pertenecen a la palabra.
 
   ```json
   {
     "result": [1, 0, -1, 0, 0],
     "letters": [
-      { "letter": "A", "status": 1 },
-      { "letter": "B", "status": 1 },
-      { "letter": "C", "status": 1 },
       { "letter": "P", "status": -1 },
       { "letter": "O", "status": -1 },
-      { "letter": "D", "status": 0 },
       ...
     ]
   }
@@ -151,6 +154,7 @@ npm start
 npm test
 ```
 
----
+## License
 
-Esta documentación ha sido realizada con la ayuda de un modelo de inteligencia artificial.
+MIT
+**Free Software, Hell Yeah!**

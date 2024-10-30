@@ -67,45 +67,39 @@ export const compareWords = (value: string, wordObj: LetterPositions):
   const result = Array(5).fill(-1);
   const disabledLetters: AlphabetObject = {}
   const valueObj: LetterPositions = setWordData(value);
-  const usedPositions = new Set(); // Para evitar reutilizar posiciones en la palabra a adivinar
-  // console.log('wordObj :', wordObj);
-  // console.log('valueObj :', valueObj);
+  const usedPositions = new Set(); // TO AVOID REUSIN POSITIONSIN THE WORD TO GUESS
   
-  // Primero, asignamos coincidencias exactas (1 en resultado) en la posición del usuario
+  // SETS THE LETTERS THAT ARE CORRECT (SAME LETTER, SAME POSITION = 1)
   for (const letter in valueObj) {
     if (wordObj[letter]) {
       for (let i = 0; i < valueObj[letter].length; i++) {
         const pos = valueObj[letter][i];
         if (wordObj[letter].includes(pos)) {
-          result[pos] = 1; // Coincidencia exacta
-          usedPositions.add(pos); // Evitamos reusar esta posición
-          wordObj[letter] = wordObj[letter].filter(p => p !== pos); // Removemos esta posición en wordObj
-          valueObj[letter] = valueObj[letter].filter(p => p !== pos); // Removemos esta posición en wordObj
-          console.log('borrada la: ', letter, ' en pos ', pos);
+          result[pos] = 1; // CORRECT LETTER
+          usedPositions.add(pos); // AVOIDS TO REUSE THAT POSITION
+          wordObj[letter] = wordObj[letter].filter(p => p !== pos); // REMOVES THE POSITION FROM wordObj
+          valueObj[letter] = valueObj[letter].filter(p => p !== pos); // REMOVES THE POSITION FROM valueObj
         }
       }
     }
   }
 
-  // Segundo, asignamos coincidencias de letra pero en posición incorrecta (0 en resultado)
+  // SETS THE LETTERS THAT ARE ALMOST CORRECT (SAME LETTER, NOT SAME POSITION = 0)
   for (const letter in valueObj) {
     if (wordObj[letter]) {
       for (let i = 0; i < valueObj[letter].length; i++) {
         const pos = valueObj[letter][i];
-        const availablePositions = wordObj[letter].filter(p => !usedPositions.has(p)); // Evitamos posiciones ya usadas
+        const availablePositions = wordObj[letter].filter(p => !usedPositions.has(p)); // AVOIDS USED POSITIONS
 
         if (availablePositions.length > 0 && result[pos] === -1) {
-          result[pos] = 0; // Marcamos como presente pero en posición incorrecta
-          usedPositions.add(availablePositions[0]); // Evitamos reusar esta posición
-          wordObj[letter] = wordObj[letter].filter(p => p !== availablePositions[0]); // Removemos la posición asignada
-          valueObj[letter] = valueObj[letter].filter(p => p !== pos); // Removemos esta posición en wordObj
-          console.log('borrada la: ', letter, ' en pos ', pos);
+          result[pos] = 0; // SETS A 0 IN THAT POSITION
+          usedPositions.add(availablePositions[0]); // AVOIDS TO REUSE THAT POSITION
+          wordObj[letter] = wordObj[letter].filter(p => p !== availablePositions[0]); // REMOVES THE POSITION FROM availablePositions
+          valueObj[letter] = valueObj[letter].filter(p => p !== pos); // REMOVES THE POSITION FROM wordObj
         }
       }
     }
   }
-  console.log('wordObj :', wordObj);
-  console.log('valueObj :', valueObj);
   //SETS THE DISABLED LETTERS
   for (const letter in valueObj) {
     if (valueObj[letter].length !== 0) {
