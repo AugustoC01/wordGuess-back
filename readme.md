@@ -7,8 +7,8 @@
 1. [Introducción](#introduccion)
 2. [Palabras almacenadas](#palabras-almacenadas)
 3. [Endpoints](#endpoints)
-   - [GET `/api/word`](#1-get-apiword)
-   - [POST `/api/word`](#2-post-apiword)
+   - [GET `/api/wordGame`](#1-get-apiwordGame)
+   - [POST `/api/wordGame`](#2-post-apiword)
 4. [Manejo de Errores](#manejo-de-errores)
 5. [Autenticación](#autenticacion)
 6. [Límites de Uso](#limites-de-uso)
@@ -28,7 +28,7 @@ Las palabras válidas están almacenadas en el archivo `words.json`, ubicado en 
 
 ---
 
-### 1. GET `/api/word`
+### 1. GET `/api/wordGame`
 
 Este endpoint devuelve una palabra aleatoria de la lista almacenada en `words.json`.
 

@@ -1,8 +1,8 @@
 import { Express } from "express-serve-static-core";
-import wordRouter from "./wordRoutes";
+import gameRouter from "./gameRouter";
 
 const Router = (app: Express) => {
-  app.use("/api/word", wordRouter);
+  app.use("/api/wordGame", gameRouter);
 };
 
 export default Router;
