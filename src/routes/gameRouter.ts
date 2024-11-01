@@ -1,13 +1,13 @@
 import { Router } from "express";
 const gameRouter = Router();
 
-import { newGame, getResult } from "../services/gameService";
+import { getResult, handleGame } from "../services/gameService";
 
-gameRouter.get("/", async (req, res, next) => {
+gameRouter.get("/:gameId?", async (req, res, next) => {
   try {
-    const { gameId } = req.body;
-    const newGameId = await newGame(gameId);
-    res.status(200).json(newGameId);
+    const { gameId } = req.params;
+    const gameData = await handleGame(gameId);
+    res.status(200).json(gameData);
   } catch (error) {
     next(error)
   }

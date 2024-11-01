@@ -1,5 +1,6 @@
 import { redis } from "../Database/database";
 
+//SETS GAME DATA IN REDIS
 export const setGameData = async (gameId:string, gameData:any) => {
   try {
     const parseData = JSON.stringify(gameData);
@@ -9,6 +10,7 @@ export const setGameData = async (gameId:string, gameData:any) => {
   }
 }
 
+//GETS GAME DATA IN REDIS
 export const getGameData = async (gameId: string): Promise<any|null> => {
   try {
     const data =  await redis.get(gameId);
@@ -23,6 +25,7 @@ export const getGameData = async (gameId: string): Promise<any|null> => {
   }
 }
 
+//CHECKS IF AN REDIS ID EXISTS OR NOT (TRUE = 1 / FALSE = 0)
 export const idExists = async (gameId:string): Promise<number> => {
   try {
     return await redis.exists(gameId);

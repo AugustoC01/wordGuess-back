@@ -30,35 +30,40 @@ Las palabras válidas están almacenadas en el archivo `words.json`, ubicado en 
 
 ### 1. GET `/api/wordGame`
 
-Este endpoint obtiene una palabra aleatoria de la lista almacenada en `words.json` la almacena en redis y devuelve el Id asociado a esa partida.
+Este endpoint genera una palabra aleatoria de la lista almacenada en words.json, la almacena en Redis y devuelve la palabra junto con el gameId asociado a la partida. Si se proporciona un gameId en los parámetros de la URL y corresponde a una partida existente, el endpoint reutiliza ese gameId. Si el gameId no existe o no se proporciona, se genera un nuevo gameId y se asocia a la partida.
 
 #### **Parámetros**
 
-Parametro opcional, si el juego ya fue iniciado puede enviarse el Id que guardaba la partida, en caso de un juego nuevo se genera un Id nuevo.
+- **gameId** (opcional): ID de la partida que se desea recuperar o continuar. Si no se envía o el ID no existe, se generará un nuevo `gameId`.
 
-```json
-{
-  "gameId": "zg3kq",
-  "wordToGuess": "PERRO"
-}
+**Ejemplo de solicitud:**
+
+```http
+GET /api/wordGame/zg3kq
 ```
 
 #### **Respuesta**
 
-- **200 OK**: Genera una palabra, la almacena en redis y devuelve el Id asociado.
+- **200 OK**: Retorna el gameId junto con la palabra generada para la partida.
   ```json
   {
-    "gameId": "up3jv"
+    "gameId": "up3jv",
+    "wordToGuess": "PERRO"
   }
   ```
 
 ### 2. POST `/api/wordGame`
 
-Este endpoint permite enviar una palabra, junto con su Id asociado a redis, para compararla con la palabra generada.
+Este endpoint permite enviar una palabra ingresada por el usuario, junto con su `gameId` asociado en Redis, para compararla con la palabra generada en la partida.
 
-#### **Parámetros**
+#### **Cuerpo de la Solicitud**
 
-Recibe un objeto JSON con la palabra ingresada por el usuario y el Id asociado a esa palabra en redis:
+Recibe un objeto JSON con los siguientes campos:
+
+- **gameId**: ID de la partida, generado previamente por el endpoint de creación.
+- **value**: Palabra de 5 letras ingresada por el usuario para comparar con la palabra generada.
+
+**Ejemplo de solicitud:**
 
 ```json
 {
@@ -67,38 +72,37 @@ Recibe un objeto JSON con la palabra ingresada por el usuario y el Id asociado a
 }
 ```
 
-- **value**: Una palabra de 5 letras.
-
 #### **Respuesta**
 
-- **200 OK**: Devuelve un objeto con dos propiedades:
+- **200 OK**: Devuelve un objeto JSON con los siguientes campos:
 
-  - **result**: Un array de 5 elementos donde:
-    - `1` significa que la letra en esa posición es correcta.
-    - `0` significa que la letra está en la palabra pero en otra posición.
-    - `-1` significa que la letra no está en la palabra.
-    - `-2` si la palabra no existe en la lista.
+  - **result**: Array de 5 elementos, donde cada posición representa el estado de la letra en esa posición:
+    - `1`: La letra en esa posición es correcta.
+    - `0`: La letra está en la palabra, pero en una posición diferente.
+    - `-1`: La letra no está en la palabra.
+    - `-2`: La palabra ingresada no existe en la lista de palabras válidas.
   - **letters**: Un array con las letras de la palabra enviada por el usuario que no pertenecen a la palabra.
 
-  ```json
-  {
-    "result": [1, 0, -1, 0, 0],
-    "letters": [
-      { "letter": "D", "status": -1 },
-      ...
-    ]
-  }
-  ```
+**Ejemplo de respuesta:**
 
-- **400 Bad Request**: Si no se envía una palabra válida, se recibe el siguiente error:
+```json
+{
+  "result": [1, 0, -1, 0, 0],
+  "letters": [{ "letter": "D", "status": -1 }]
+}
+```
 
-  ```json
-  {
-    "message": "Missing required word!"
-  }
-  ```
+- **400 Bad Request**: Devuelve un error si no se envía una palabra válida.
 
-- **500 Internal Server Error**: Si ocurre un error en el servidor.
+**Ejemplo de respuesta:**
+
+```json
+{
+  "message": "Missing required word!"
+}
+```
+
+- **500 Internal Server Error**: Devuelve un error si ocurre un problema inesperado en el servidor.
 
 ## Manejo de Errores
 

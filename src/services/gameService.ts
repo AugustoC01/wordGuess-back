@@ -1,10 +1,10 @@
-import { getGameData, setGameData } from "./databaseService";
+import { getGameData, idExists, setGameData } from "./databaseService";
 import { getRandomId } from "../utils/idGenerator";
 import * as wordService from "./wordService";
 import { AlphabetObject } from "../types";
 
 //THIS FN GETS THE WORD TO GUESS, SAVES THE DATA TO THE DB AND RETURNS A GAMEID
-export const newGame = async (gameId?:string): Promise<{ gameId: string; wordToGuess: string; } | void> => {
+const newGame = async (gameId?:string): Promise<{ gameId: string; wordToGuess: string; } | void> => {
   try {
     if (!gameId) {
       gameId = getRandomId();
@@ -31,5 +31,19 @@ export const getResult = async (gameId: string, userWord: string):
   } catch (error) {
     console.log('Error: ', error);
     return null;
+  }
+}
+
+export const handleGame = async (gameId?:string): Promise<{ gameId: string; wordToGuess: string; } | void > => {
+  try {
+    if (gameId) {
+      const exists = await idExists(gameId);
+      if (exists === 1) {
+        return await newGame(gameId);
+      }
+    }
+    return await newGame();
+  } catch (error) {
+    console.log('Error: ', error);
   }
 }

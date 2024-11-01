@@ -1,4 +1,4 @@
-import { compareWords, getLetterPositions, getRandomWord, setErrorResult, wordExists } from "../services/wordService"; //setWordData
+import { getLetterPositions, getRandomWord, setErrorResult, wordExists } from "../services/wordService"; //setWordData
 import wordsList from "../Mocks/words.json";
 
 
