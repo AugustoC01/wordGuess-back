@@ -7,8 +7,8 @@
 1. [Introducción](#introduccion)
 2. [Palabras almacenadas](#palabras-almacenadas)
 3. [Endpoints](#endpoints)
-   - [GET `/api/wordGame`](#1-get-apiwordGame)
-   - [POST `/api/wordGame`](#2-post-apiword)
+   - [GET `/wordGame`](#1-get-wordGame)
+   - [POST `/wordGame`](#2-post-wordGame)
 4. [Manejo de Errores](#manejo-de-errores)
 5. [Autenticación](#autenticacion)
 6. [Límites de Uso](#limites-de-uso)
@@ -28,7 +28,7 @@ Las palabras válidas están almacenadas en el archivo `words.json`, ubicado en 
 
 ---
 
-### 1. GET `/api/wordGame`
+### 1. GET `/wordGame`
 
 Este endpoint genera una palabra aleatoria de la lista almacenada en words.json, la almacena en Redis y devuelve la palabra junto con el gameId asociado a la partida. Si se proporciona un gameId en los parámetros de la URL y corresponde a una partida existente, el endpoint reutiliza ese gameId. Si el gameId no existe o no se proporciona, se genera un nuevo gameId y se asocia a la partida.
 
@@ -39,7 +39,7 @@ Este endpoint genera una palabra aleatoria de la lista almacenada en words.json,
 **Ejemplo de solicitud:**
 
 ```http
-GET /api/wordGame/zg3kq
+GET /wordGame/zg3kq
 ```
 
 #### **Respuesta**
@@ -52,7 +52,7 @@ GET /api/wordGame/zg3kq
   }
   ```
 
-### 2. POST `/api/wordGame`
+### 2. POST `/wordGame`
 
 Este endpoint permite enviar una palabra ingresada por el usuario, junto con su `gameId` asociado en Redis, para compararla con la palabra generada en la partida.
 

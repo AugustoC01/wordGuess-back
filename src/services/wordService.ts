@@ -20,8 +20,7 @@ export const getLetterPositions = (value: string): LetterPositions => {
   return valueObj;
 };
 
-//THIS FUNCTION CREATES OBJECTS TO COMPARE WITH THE USER INPUT
-export const setWordData = (word: string):LetterPositions => {
+export const formatWord = (word: string):string => {
   const accentMap:{[index: string] : string} = {
     'Á': 'A',
     'É': 'E',
@@ -31,12 +30,18 @@ export const setWordData = (word: string):LetterPositions => {
   };
   const tildeRegex: RegExp = /[ÁÉÍÓÚ]/;
 
+  let newWord = "";
   //REPLACE THE LETTERS WITH SYMBOLS
   if (tildeRegex.test(word)) {
-    word = word.replace(/[ÁÉÍÓÚ]/g, (matched) => accentMap[matched]);
+    newWord = word.replace(/[ÁÉÍÓÚ]/g, (matched) => accentMap[matched]);
   }
+  return newWord;
+}
 
-  const wordData = getLetterPositions(word);
+//THIS FUNCTION CREATES OBJECTS TO COMPARE WITH THE USER INPUT
+export const setWordData = (word: string):LetterPositions => {
+  const newWord = formatWord(word);
+  const wordData = getLetterPositions(newWord);
   return wordData
 };
 
